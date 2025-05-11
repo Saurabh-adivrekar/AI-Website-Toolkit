@@ -72,8 +72,8 @@ results = scanner.full_scan()  # Returns JSON report
 
 Demo Screenshot:
 ![Screenshot 2025-05-11 at 11 51 44 PM](https://github.com/user-attachments/assets/81fbe3c1-c501-430b-a70a-eec52634b1fb)
-![Screenshot 2025-05-11 at 11 56 23 PM](https://github.com/user-attachments/assets/ba476f30-5d47-4025-994e-a20001d81c9f)
-![Screenshot 2025-05-11 at 11 55 12 PM](https://github.com/user-attachments/assets/a26321cb-33ab-456a-9d63-aa9001f978fc)
-![Screenshot 2025-05-11 at 11 55 02 PM](https://github.com/user-attachments/assets/ee26b255-d8af-4b88-abd9-bdeaa1c7405f)
-![Screenshot 2025-05-11 at 11 52 29 PM](https://github.com/user-attachments/assets/bd301ee7-d3d0-4726-afd5-2deabd69cc87)
-![Screenshot 2025-05-11 at 11 52 19 PM](https://github.com/user-attachments/assets/7bd1d71c-2697-4e7c-9b4b-3428f9f2cd06)
+![Screenshot 2025-05-11 at 11 52 19 PM](https://github.com/user-attachments/assets/f927ba2a-0ead-4580-b951-cff525b1066e)
+![Screenshot 2025-05-11 at 11 52 29 PM](https://github.com/user-attachments/assets/51de4aec-71bd-4e63-b425-682c48fbd890)
+![Screenshot 2025-05-11 at 11 55 02 PM](https://github.com/user-attachments/assets/3bdbddf2-5a72-4120-bf88-211d08239470)
+![Screenshot 2025-05-11 at 11 55 12 PM](https://github.com/user-attachments/assets/f721c8cf-d08c-4294-a610-f0702e6a9579)
+![Screenshot 2025-05-11 at 11 56 23 PM](https://github.com/user-attachments/assets/5d86054f-bf85-475c-bc10-0043c97fed4f)
