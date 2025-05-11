@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Analysis Toolkit</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-shield-alt"></i> Security Analysis Toolkit</h1>
+            <p>Our comprehensive suite of security tools helps you identify and mitigate web-based threats in real-time.</p>
+        </header>
+
+        <main>
+            <!-- Phishing Detector Section -->
+            <section class="tool-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-fish"></i> Phishing Detector</h2>
+                    <p>Analyze URLs for potential phishing attempts using machine learning and pattern recognition.</p>
+                </div>
+                <div class="tool-input">
+                    <input type="text" id="phishingUrl" placeholder="https://example.com">
+                    <button id="phishingBtn">Analyze URL</button>
+                </div>
+                <div class="tool-result" id="phishingResult"></div>
+            </section>
+
+            <!-- SSL Validator Section -->
+            <section class="tool-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-lock"></i> SSL Validator</h2>
+                    <p>Verify SSL/TLS certificate validity, configuration, and encryption strength.</p>
+                </div>
+                <div class="tool-input">
+                    <input type="text" id="sslUrl" placeholder="https://example.com">
+                    <button id="sslBtn">Validate SSL</button>
+                </div>
+                <div class="tool-result" id="sslResult"></div>
+            </section>
+
+            <!-- Reputation Checker Section -->
+            <section class="tool-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-star"></i> Reputation Checker</h2>
+                    <p>Check domain reputation against multiple threat intelligence feeds and blacklists.</p>
+                </div>
+                <div class="tool-input">
+                    <input type="text" id="reputationDomain" placeholder="example.com">
+                    <button id="reputationBtn">Check Reputation</button>
+                </div>
+                <div class="tool-result" id="reputationResult"></div>
+            </section>
+
+            <!-- Malware Scanner Section -->
+            <section class="tool-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-bug"></i> Malware Scanner</h2>
+                    <p>Scan URLs for known malware distribution, drive-by downloads, and exploit kits.</p>
+                </div>
+                <div class="tool-input">
+                    <input type="text" id="malwareUrl" placeholder="https://example.com">
+                    <button id="malwareBtn">Scan for Malware</button>
+                </div>
+                <div class="tool-result" id="malwareResult"></div>
+            </section>
+
+            <!-- Domain Age Checker Section -->
+            <section class="tool-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-calendar-alt"></i> Domain Age Checker</h2>
+                    <p>Identify newly registered domains that may be used for malicious purposes.</p>
+                </div>
+                <div class="tool-input">
+                    <input type="text" id="domainAgeDomain" placeholder="example.com">
+                    <button id="domainAgeBtn">Check Domain Age</button>
+                </div>
+                <div class="tool-result" id="domainAgeResult"></div>
+            </section>
+
+            <!-- WHOIS Lookup Section -->
+            <section class="tool-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-search"></i> WHOIS Lookup</h2>
+                    <p>Retrieve domain registration details including owner, registrar, and dates.</p>
+                </div>
+                <div class="tool-input">
+                    <input type="text" id="whoisDomain" placeholder="example.com">
+                    <button id="whoisBtn">Lookup WHOIS</button>
+                </div>
+                <div class="tool-result" id="whoisResult"></div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Security Analysis Toolkit &copy; 2023 | For educational purposes only</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
