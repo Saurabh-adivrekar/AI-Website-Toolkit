@@ -71,4 +71,9 @@ results = scanner.full_scan()  # Returns JSON report
  ![System Architecture](https://github.com/user-attachments/assets/019f62af-af81-498e-82a7-cd517821d0ff)
 
 Demo Screenshot:
-![Screenshot 2025-05-11 at 6 21 43 PM](https://github.com/user-attachments/assets/6c2cff44-3f91-43e5-a952-007099ebea8b)
+![Screenshot 2025-05-11 at 11 51 44 PM](https://github.com/user-attachments/assets/81fbe3c1-c501-430b-a70a-eec52634b1fb)
+![Screenshot 2025-05-11 at 11 56 23 PM](https://github.com/user-attachments/assets/ba476f30-5d47-4025-994e-a20001d81c9f)
+![Screenshot 2025-05-11 at 11 55 12 PM](https://github.com/user-attachments/assets/a26321cb-33ab-456a-9d63-aa9001f978fc)
+![Screenshot 2025-05-11 at 11 55 02 PM](https://github.com/user-attachments/assets/ee26b255-d8af-4b88-abd9-bdeaa1c7405f)
+![Screenshot 2025-05-11 at 11 52 29 PM](https://github.com/user-attachments/assets/bd301ee7-d3d0-4726-afd5-2deabd69cc87)
+![Screenshot 2025-05-11 at 11 52 19 PM](https://github.com/user-attachments/assets/7bd1d71c-2697-4e7c-9b4b-3428f9f2cd06)
