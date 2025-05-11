@@ -61,7 +61,7 @@ pip install -r requirements.txt
 echo "VT_API=your_virustotal_key" > .env
 echo "GSB_API=your_google_safe_browsing_key" >> .env
 
-###3. Usage
+3. Usage
 
 from toolkit import WebTrustScan
 
