@@ -67,9 +67,8 @@ from toolkit import WebTrustScan
 
 scanner = WebTrustScan(target_url="https://example.com")
 results = scanner.full_scan()  # Returns JSON report
-
   System Architecture:
  ![System Architecture](https://github.com/user-attachments/assets/019f62af-af81-498e-82a7-cd517821d0ff)
 
-
- 
+Demo Screenshot:
+![Screenshot 2025-05-11 at 6 21 43 PM](https://github.com/user-attachments/assets/6c2cff44-3f91-43e5-a952-007099ebea8b)
