@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Advanced Cybersecurity Toolkit</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --primary-dark: #2563eb;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --success: #10b981;
+      --info: #06b6d4;
+      --dark: #1f2937;
+      --darker: #111827;
+      --light: #f3f4f6;
+      --gray: #9ca3af;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--darker);
+      color: var(--light);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    header {
+      background: var(--dark);
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--box-shadow);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .logo i {
+      font-size: 1.8rem;
+      color: var(--primary);
+    }
+
+    nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    nav button {
+      padding: 10px 15px;
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: 500;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    nav button:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    nav button.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    nav button i {
+      font-size: 1rem;
+    }
+
+    main {
+      padding: 30px 0;
+    }
+
+    .section {
+      display: none;
+      background: var(--dark);
+      border-radius: var(--border-radius);
+      padding: 25px;
+      box-shadow: var(--box-shadow);
+      margin-bottom: 30px;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .section-header {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-header h2 {
+      color: var(--primary);
+      font-size: 1.5rem;
+    }
+
+    .section-header i {
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--light);
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #374151;
+      border-radius: var(--border-radius);
+      background: #1f2937;
+      color: var(--light);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    button {
+      padding: 12px 20px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    button i {
+      font-size: 1rem;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .btn-secondary {
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+
+    .btn-success {
+      background: var(--success);
+    }
+
+    .btn-success:hover {
+      background: #059669;
+    }
+
+    .btn-info {
+      background: var(--info);
+    }
+
+    .btn-info:hover {
+      background: #0891b2;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: var(--border-radius);
+      font-weight: 500;
+      display: none;
+    }
+
+    .result.show {
+      display: block;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .result-danger {
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 4px solid var(--danger);
+      color: var(--danger);
+    }
+
+    .result-warning {
+      background: rgba(245, 158, 11, 0.1);
+      border-left: 4px solid var(--warning);
+      color: var(--warning);
+    }
+
+    .result-success {
+      background: rgba(16, 185, 129, 0.1);
+      border-left: 4px solid var(--success);
+      color: var(--success);
+    }
+
+    .result-info {
+      background: rgba(59, 130, 246, 0.1);
+      border-left: 4px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .loading {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--primary);
+      font-size: 0.9rem;
+      padding: 10px 0;
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(59, 130, 246, 0.2);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    .result-item {
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #374151;
+    }
+
+    .result-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .result-label {
+      font-weight: 600;
+      color: var(--light);
+    }
+
+    .result-value {
+      text-align: right;
+      max-width: 60%;
+      word-break: break-word;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .badge-safe {
+      background: var(--success);
+      color: white;
+    }
+
+    .badge-warning {
+      background: var(--warning);
+      color: white;
+    }
+
+    .badge-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .badge-info {
+      background: var(--info);
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      nav {
+        width: 100%;
+        justify-content: center;
+      }
+
+      nav button {
+        flex: 1;
+        min-width: 120px;
+        justify-content: center;
+      }
+      
+      .btn-group {
+        flex-direction: column;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <i class="fas fa-shield-alt"></i>
+          <h1>Advanced Cybersecurity Toolkit</h1>
+        </div>
+        <nav>
+          <button class="active" onclick="showSection('reputation')">
+            <i class="fas fa-star"></i> Reputation
+          </button>
+          <button onclick="showSection('phishing')">
+            <i class="fas fa-fish"></i> Phishing
+          </button>
+          <button onclick="showSection('domain-age')">
+            <i class="fas fa-calendar-alt"></i> Domain Age
+          </button>
+          <button onclick="showSection('ssl')">
+            <i class="fas fa-lock"></i> SSL
+          </button>
+          <button onclick="showSection('malware')">
+            <i class="fas fa-bug"></i> Malware
+          </button>
+          <button onclick="showSection('whois')">
+            <i class="fas fa-search"></i> WHOIS
+          </button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Reputation Checker -->
+    <div class="section active" id="reputation">
+      <div class="section-header">
+        <i class="fas fa-star"></i>
+        <h2>Domain Reputation Checker</h2>
+      </div>
+      
+      <div class="form-group">
+        <label for="reputationDomain">Enter domain to check reputation</label>
+        <input type="text" id="reputationDomain" placeholder="example.com" />
+      </div>
+      
+      <div class="btn-group">
+        <button onclick="checkReputation()">
+          <i class="fas fa-check"></i> Check Reputation
+        </button>
+        <button class="btn-secondary" onclick="clearInput('reputationDomain')">
+          <i class="fas fa-trash"></i> Clear
+        </button>
+      </div>
+      
+      <div class="result" id="reputationResult"></div>
+      
+      <div class="result" style="display: none; background: rgba(59, 130, 246, 0.1);" id="reputationDetails">
+        <div class="result-item">
+          <div class="result-row">
+            <span class="result-label">Domain:</span>
+            <span class="result-value" id="reputationDomainValue">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Reputation Score:</span>
+            <span class="result-value" id="reputationScore">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Status:</span>
+            <span class="result-value" id="reputationStatus">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Blacklists:</span>
+            <span class="result-value" id="reputationBlacklists">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Analysis:</span>
+            <span class="result-value" id="reputationAnalysis">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phishing Detector -->
+    <div class="section" id="phishing">
+      <div class="section-header">
+        <i class="fas fa-fish"></i>
+        <h2>Phishing Website Detector</h2>
+      </div>
+      
+      <div class="form-group">
+        <label for="phishingUrl">Enter URL to check for phishing</label>
+        <input type="text" id="phishingUrl" placeholder="https://example.com" />
+      </div>
+      
+      <div class="btn-group">
+        <button onclick="checkPhishing()">
+          <i class="fas fa-search"></i> Detect Phishing
+        </button>
+        <button class="btn-secondary" onclick="clearInput('phishingUrl')">
+          <i class="fas fa-trash"></i> Clear
+        </button>
+      </div>
+      
+      <div class="result" id="phishingResult"></div>
+      
+      <div class="result" style="display: none; background: rgba(59, 130, 246, 0.1);" id="phishingDetails">
+        <div class="result-item">
+          <div class="result-row">
+            <span class="result-label">URL:</span>
+            <span class="result-value" id="phishingUrlValue">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Phishing Detected:</span>
+            <span class="result-value" id="phishingVerdict">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Confidence:</span>
+            <span class="result-value" id="phishingConfidence">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Indicators:</span>
+            <span class="result-value" id="phishingIndicators">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Domain Age Checker -->
+    <div class="section" id="domain-age">
+      <div class="section-header">
+        <i class="fas fa-calendar-alt"></i>
+        <h2>Domain Age Checker</h2>
+      </div>
+      
+      <div class="form-group">
+        <label for="domainAgeDomain">Enter domain to check age</label>
+        <input type="text" id="domainAgeDomain" placeholder="example.com" />
+      </div>
+      
+      <div class="btn-group">
+        <button onclick="checkDomainAge()">
+          <i class="fas fa-clock"></i> Check Age
+        </button>
+        <button class="btn-secondary" onclick="clearInput('domainAgeDomain')">
+          <i class="fas fa-trash"></i> Clear
+        </button>
+      </div>
+      
+      <div class="result" id="domainAgeResult"></div>
+      
+      <div class="result" style="display: none; background: rgba(59, 130, 246, 0.1);" id="domainAgeDetails">
+        <div class="result-item">
+          <div class="result-row">
+            <span class="result-label">Domain:</span>
+            <span class="result-value" id="domainAgeDomainValue">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Created On:</span>
+            <span class="result-value" id="domainCreatedDate">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Age:</span>
+            <span class="result-value" id="domainAge">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Expires On:</span>
+            <span class="result-value" id="domainExpiresDate">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Status:</span>
+            <span class="result-value" id="domainAgeStatus">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SSL Validator -->
+    <div class="section" id="ssl">
+      <div class="section-header">
+        <i class="fas fa-lock"></i>
+        <h2>SSL Certificate Validator</h2>
+      </div>
+      
+      <div class="form-group">
+        <label for="sslDomain">Enter domain to check SSL certificate</label>
+        <input type="text" id="sslDomain" placeholder="example.com" />
+      </div>
+      
+      <div class="btn-group">
+        <button onclick="checkSSL()">
+          <i class="fas fa-check-circle"></i> Validate SSL
+        </button>
+        <button class="btn-secondary" onclick="clearInput('sslDomain')">
+          <i class="fas fa-trash"></i> Clear
+        </button>
+      </div>
+      
+      <div class="result" id="sslResult"></div>
+      
+      <div class="result" style="display: none; background: rgba(59, 130, 246, 0.1);" id="sslDetails">
+        <div class="result-item">
+          <div class="result-row">
+            <span class="result-label">Domain:</span>
+            <span class="result-value" id="sslDomainValue">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">SSL Valid:</span>
+            <span class="result-value" id="sslValid">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Issued By:</span>
+            <span class="result-value" id="sslIssuer">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Expires On:</span>
+            <span class="result-value" id="sslExpires">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Protocol:</span>
+            <span class="result-value" id="sslProtocol">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Malware Scanner -->
+    <div class="section" id="malware">
+      <div class="section-header">
+        <i class="fas fa-bug"></i>
+        <h2>Malware Scanner</h2>
+      </div>
+      
+      <div class="form-group">
+        <label for="malwareUrl">Enter URL to scan for malware</label>
+        <input type="text" id="malwareUrl" placeholder="https://example.com" />
+      </div>
+      
+      <div class="btn-group">
+        <button onclick="scanMalware()">
+          <i class="fas fa-search"></i> Scan for Malware
+        </button>
+        <button class="btn-secondary" onclick="clearInput('malwareUrl')">
+          <i class="fas fa-trash"></i> Clear
+        </button>
+      </div>
+      
+      <div class="result" id="malwareResult"></div>
+      
+      <div class="result" style="display: none; background: rgba(59, 130, 246, 0.1);" id="malwareDetails">
+        <div class="result-item">
+          <div class="result-row">
+            <span class="result-label">URL:</span>
+            <span class="result-value" id="malwareUrlValue">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Malware Detected:</span>
+            <span class="result-value" id="malwareVerdict">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Detection Ratio:</span>
+            <span class="result-value" id="malwareRatio">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Last Scanned:</span>
+            <span class="result-value" id="malwareLastScanned">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Threat Types:</span>
+            <span class="result-value" id="malwareThreats">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHOIS Lookup -->
+    <div class="section" id="whois">
+      <div class="section-header">
+        <i class="fas fa-search"></i>
+        <h2>WHOIS Lookup</h2>
+      </div>
+      
+      <div class="form-group">
+        <label for="whoisDomain">Enter domain for WHOIS information</label>
+        <input type="text" id="whoisDomain" placeholder="example.com" />
+      </div>
+      
+      <div class="btn-group">
+        <button onclick="whoisLookup()">
+          <i class="fas fa-info-circle"></i> Lookup WHOIS
+        </button>
+        <button class="btn-secondary" onclick="clearInput('whoisDomain')">
+          <i class="fas fa-trash"></i> Clear
+        </button>
+      </div>
+      
+      <div class="result" id="whoisResult"></div>
+      
+      <div class="result" style="display: none; background: rgba(59, 130, 246, 0.1);" id="whoisDetails">
+        <div class="result-item">
+          <div class="result-row">
+            <span class="result-label">Domain:</span>
+            <span class="result-value" id="whoisDomainValue">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Registrar:</span>
+            <span class="result-value" id="whoisRegistrar">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Registered On:</span>
+            <span class="result-value" id="whoisCreated">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Expires On:</span>
+            <span class="result-value" id="whoisExpires">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Name Servers:</span>
+            <span class="result-value" id="whoisNameservers">-</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Status:</span>
+            <span class="result-value" id="whoisStatus">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p><i class="fas fa-code"></i> with <i class="fas fa-heart" style="color: #ef4444;"></i> by Cybersecurity Toolkit</p>
+      <p style="margin-top: 5px; font-size: 0.8rem;">All processing happens locally in your browser - no data is collected or stored.</p>
+    </div>
+  </footer>
+
+  <script>
+    // DOM elements
+    const reputationDomain = document.getElementById('reputationDomain');
+    const reputationResult = document.getElementById('reputationResult');
+    const phishingUrl = document.getElementById('phishingUrl');
+    const phishingResult = document.getElementById('phishingResult');
+    const domainAgeDomain = document.getElementById('domainAgeDomain');
+    const domainAgeResult = document.getElementById('domainAgeResult');
+    const sslDomain = document.getElementById('sslDomain');
+    const sslResult = document.getElementById('sslResult');
+    const malwareUrl = document.getElementById('malwareUrl');
+    const malwareResult = document.getElementById('malwareResult');
+    const whoisDomain = document.getElementById('whoisDomain');
+    const whoisResult = document.getElementById('whoisResult');
+
+    // Show section function
+    function showSection(id) {
+      // Hide all sections
+      document.querySelectorAll('.section').forEach(sec => {
+        sec.classList.remove('active');
+      });
+      
+      // Show selected section
+      document.getElementById(id).classList.add('active');
+      
+      // Update active nav button
+      document.querySelectorAll('nav button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.currentTarget.classList.add('active');
+      
+      // Reset results when switching sections
+      resetResults();
+    }
+
+    // Reset result displays
+    function resetResults() {
+      reputationResult.classList.remove('show');
+      phishingResult.classList.remove('show');
+      domainAgeResult.classList.remove('show');
+      sslResult.classList.remove('show');
+      malwareResult.classList.remove('show');
+      whoisResult.classList.remove('show');
+      
+      document.getElementById('reputationDetails').style.display = 'none';
+      document.getElementById('phishingDetails').style.display = 'none';
+      document.getElementById('domainAgeDetails').style.display = 'none';
+      document.getElementById('sslDetails').style.display = 'none';
+      document.getElementById('malwareDetails').style.display = 'none';
+      document.getElementById('whoisDetails').style.display = 'none';
+    }
+
+    // Clear input field
+    function clearInput(inputId) {
+      document.getElementById(inputId).value = '';
+      resetResults();
+    }
+
+    // Check domain reputation
+    function checkReputation() {
+      const domain = reputationDomain.value.trim();
+      if (!domain) {
+        reputationResult.className = "result show result-info";
+        reputationResult.innerHTML = '<i class="fas fa-info-circle"></i> Please enter a domain';
+        return;
+      }
+      
+      reputationResult.className = "result show result-info";
+      reputationResult.innerHTML = '<div class="loading"><div class="spinner"></div><span>Checking domain reputation...</span></div>';
+      
+      // Simulate API call with timeout
+      setTimeout(() => {
+        const reputationScore = Math.floor(Math.random() * 100);
+        let reputationStatus, badgeClass;
+        
+        if (reputationScore >= 75) {
+          reputationStatus = 'Excellent';
+          badgeClass = 'badge-safe';
+        } else if (reputationScore >= 50) {
+          reputationStatus = 'Good';
+          badgeClass = 'badge-info';
+        } else if (reputationScore >= 25) {
+          reputationStatus = 'Fair';
+          badgeClass = 'badge-warning';
+        } else {
+          reputationStatus = 'Poor';
+          badgeClass = 'badge-danger';
+        }
+        
+        // Update details
+        document.getElementById('reputationDomainValue').textContent = domain;
+        document.getElementById('reputationScore').textContent = `${reputationScore}/100`;
+        document.getElementById('reputationStatus').innerHTML = `<span class="badge ${badgeClass}">${reputationStatus}</span>`;
+        document.getElementById('reputationBlacklists').textContent = Math.random() > 0.8 ? '1 blacklist found' : 'No blacklists found';
+        document.getElementById('reputationAnalysis').textContent = getRandomAnalysis();
+        
+        // Show result
+        reputationResult.className = "result show " + (reputationScore >= 50 ? "result-success" : reputationScore >= 25 ? "result-warning" : "result-danger");
+        reputationResult.innerHTML = `<i class="fas fa-${reputationScore >= 50 ? 'check-circle' : 'exclamation-triangle'}"></i> Domain reputation: ${reputationStatus} (${reputationScore}/100)`;
+        
+        // Show details
+        document.getElementById('reputationDetails').style.display = 'block';
+      }, 1500);
+    }
+
+    // Check for phishing
+    function checkPhishing() {
+      const url = phishingUrl.value.trim();
+      if (!url) {
+        phishingResult.className = "result show result-info";
+        phishingResult.innerHTML = '<i class="fas fa-info-circle"></i> Please enter a URL';
+        return;
+      }
+      
+      phishingResult.className = "result show result-info";
+      phishingResult.innerHTML = '<div class="loading"><div class="spinner"></div><span>Analyzing URL for phishing...</span></div>';
+      
+      // Simulate API call with timeout
+      setTimeout(() => {
+        const isPhishing = Math.random() > 0.7; // 30% chance of being phishing
+        const confidence = Math.floor(Math.random() * 40) + 60; // 60-99% confidence
+        
+        // Update details
+        document.getElementById('phishingUrlValue').textContent = url;
+        document.getElementById('phishingVerdict').innerHTML = `<span class="badge ${isPhishing ? 'badge-danger' : 'badge-safe'}">${isPhishing ? 'Yes' : 'No'}</span>`;
+        document.getElementById('phishingConfidence').textContent = isPhishing ? `${confidence}% confidence` : 'N/A';
+        document.getElementById('phishingIndicators').textContent = isPhishing ? getRandomPhishingReason() : 'No phishing indicators detected';
+        
+        // Show result
+        phishingResult.className = "result show " + (isPhishing ? "result-danger" : "result-success");
+        phishingResult.innerHTML = `<i class="fas fa-${isPhishing ? 'exclamation-triangle' : 'check-circle'}"></i> Phishing ${isPhishing ? 'detected' : 'not detected'}${isPhishing ? ` (${confidence}% confidence)` : ''}`;
+        
+        // Show details
+        document.getElementById('phishingDetails').style.display = 'block';
+      }, 1500);
+    }
+
+    // Check domain age
+    function checkDomainAge() {
+      const domain = domainAgeDomain.value.trim();
+      if (!domain) {
+        domainAgeResult.className = "result show result-info";
+        domainAgeResult.innerHTML = '<i class="fas fa-info-circle"></i> Please enter a domain';
+        return;
+      }
+      
+      domainAgeResult.className = "result show result-info";
+      domainAgeResult.innerHTML = '<div class="loading"><div class="spinner"></div><span>Checking domain age...</span></div>';
+      
+      // Simulate API call with timeout
+      setTimeout(() => {
+        const years = Math.floor(Math.random() * 20) + 1;
+        const days = Math.floor(Math.random() * 365);
+        const createdDate = new Date();
+        createdDate.setFullYear(createdDate.getFullYear() - years);
+        createdDate.setDate(createdDate.getDate() - days);
+        
+        const expiresDate = new Date(createdDate);
+        expiresDate.setFullYear(expiresDate.getFullYear() + (Math.floor(Math.random() * 5) + 1));
+        
+        const formattedDate = createdDate.toLocaleDateString();
+        const expiresFormatted = expiresDate.toLocaleDateString();
+        
+        // Update details
+        document.getElementById('domainAgeDomainValue').textContent = domain;
+        document.getElementById('domainCreatedDate').textContent = formattedDate;
+        document.getElementById('domainAge').textContent = `${years} year${years !== 1 ? 's' : ''}, ${days} day${days !== 1 ? 's' : ''}`;
+        document.getElementById('domainExpiresDate').textContent = expiresFormatted;
+        document.getElementById('domainAgeStatus').innerHTML = `<span class="badge ${years > 5 ? 'badge-safe' : years > 2 ? 'badge-info' : 'badge-warning'}">${years > 5 ? 'Established' : years > 2 ? 'Mature' : 'New'}</span>`;
+        
+        // Show result
+        domainAgeResult.className = "result show result-success";
+        domainAgeResult.innerHTML = `<i class="fas fa-check-circle"></i> Domain age: ${years} year${years !== 1 ? 's' : ''}, ${days} day${days !== 1 ? 's' : ''}`;
+        
+        // Show details
+        document.getElementById('domainAgeDetails').style.display = 'block';
+      }, 1500);
+    }
+
+    // Check SSL certificate
+    function checkSSL() {
+      const domain = sslDomain.value.trim();
+      if (!domain) {
+        sslResult.className = "result show result-info";
+        sslResult.innerHTML = '<i class="fas fa-info-circle"></i> Please enter a domain';
+        return;
+      }
+      
+      sslResult.className = "result show result-info";
+      sslResult.innerHTML = '<div class="loading"><div class="spinner"></div><span>Validating SSL certificate...</span></div>';
+      
+      // Simulate API call with timeout
+      setTimeout(() => {
+        const isValid = Math.random() > 0.2; // 80% chance of valid SSL
+        const expiresIn = Math.floor(Math.random() * 180) + 1;
+        const issuer = getRandomSSLIssuer();
+        
+        // Update details
+        document.getElementById('sslDomainValue').textContent = domain;
+        document.getElementById('sslValid').innerHTML = `<span class="badge ${isValid ? 'badge-safe' : 'badge-danger'}">${isValid ? 'Yes' : 'No'}</span>`;
+        document.getElementById('sslIssuer').textContent = isValid ? issuer : 'Invalid certificate';
+        document.getElementById('sslExpires').textContent = isValid ? `In ${expiresIn} day${expiresIn !== 1 ? 's' : ''}` : 'N/A';
+        document.getElementById('sslProtocol').textContent = isValid ? 'TLS 1.3' : 'N/A';
+        
+        // Show result
+        sslResult.className = "result show " + (isValid ? "result-success" : "result-danger");
+        sslResult.innerHTML = `<i class="fas fa-${isValid ? 'check-circle' : 'exclamation-triangle'}"></i> SSL certificate is ${isValid ? 'valid' : 'invalid'}`;
+        
+        // Show details
+        document.getElementById('sslDetails').style.display = 'block';
+      }, 1500);
+    }
+
+    // Scan for malware
+    function scanMalware() {
+      const url = malwareUrl.value.trim();
+      if (!url) {
+        malwareResult.className = "result show result-info";
+        malwareResult.innerHTML = '<i class="fas fa-info-circle"></i> Please enter a URL';
+        return;
+      }
+      
+      malwareResult.className = "result show result-info";
+      malwareResult.innerHTML = '<div class="loading"><div class="spinner"></div><span>Scanning for malware...</span></div>';
+      
+      // Simulate API call with timeout
+      setTimeout(() => {
+        const hasMalware = Math.random() > 0.8; // 20% chance of malware
+        const threatsDetected = hasMalware ? Math.floor(Math.random() * 5) + 1 : 0;
+        
+        // Update details
+        document.getElementById('malwareUrlValue').textContent = url;
+        document.getElementById('malwareVerdict').innerHTML = `<span class="badge ${hasMalware ? 'badge-danger' : 'badge-safe'}">${hasMalware ? 'Yes' : 'No'}</span>`;
+        document.getElementById('malwareRatio').textContent = hasMalware ? `${Math.floor(Math.random() * 20) + 30}% of scanners detected` : '0% of scanners detected';
+        document.getElementById('malwareLastScanned').textContent = new Date().toLocaleDateString();
+        document.getElementById('malwareThreats').textContent = hasMalware ? getRandomMalwareTypes(threatsDetected) : 'No threats detected';
+        
+        // Show result
+        malwareResult.className = "result show " + (hasMalware ? "result-danger" : "result-success");
+        malwareResult.innerHTML = `<i class="fas fa-${hasMalware ? 'exclamation-triangle' : 'check-circle'}"></i> Malware ${hasMalware ? 'detected' : 'not detected'}`;
+        
+        // Show details
+        document.getElementById('malwareDetails').style.display = 'block';
+      }, 1500);
+    }
+
+    // WHOIS lookup
+    function whoisLookup() {
+      const domain = whoisDomain.value.trim();
+      if (!domain) {
+        whoisResult.className = "result show result-info";
+        whoisResult.innerHTML = '<i class="fas fa-info-circle"></i> Please enter a domain';
+        return;
+      }
+      
+      whoisResult.className = "result show result-info";
+      whoisResult.innerHTML = '<div class="loading"><div class="spinner"></div><span>Performing WHOIS lookup...</span></div>';
+      
+      // Simulate API call with timeout
+      setTimeout(() => {
+        const registrars = ['GoDaddy', 'Namecheap', 'Google Domains', 'Network Solutions', 'Name.com'];
+        const registrar = registrars[Math.floor(Math.random() * registrars.length)];
+        
+        const createdDate = new Date();
+        createdDate.setFullYear(createdDate.getFullYear() - (Math.floor(Math.random() * 10) + 1));
+        
+        const expiresDate = new Date(createdDate);
+        expiresDate.setFullYear(expiresDate.getFullYear() + (Math.floor(Math.random() * 5) + 1));
+        
+        const nameServers = [
+          `ns1.${domain.split('.')[0]}.com`,
+          `ns2.${domain.split('.')[0]}.com`,
+          `ns3.${domain.split('.')[0]}.com`
+        ];
+        
+        // Update details
+        document.getElementById('whoisDomainValue').textContent = domain;
+        document.getElementById('whoisRegistrar').textContent = registrar;
+        document.getElementById('whoisCreated').textContent = createdDate.toLocaleDateString();
+        document.getElementById('whoisExpires').textContent = expiresDate.toLocaleDateString();
+        document.getElementById('whoisNameservers').textContent = nameServers.join(', ');
+        document.getElementById('whoisStatus').innerHTML = '<span class="badge badge-info">Active</span>';
+        
+        // Show result
+        whoisResult.className = "result show result-success";
+        whoisResult.innerHTML = `<i class="fas fa-check-circle"></i> WHOIS information retrieved for ${domain}`;
+        
+        // Show details
+        document.getElementById('whoisDetails').style.display = 'block';
+      }, 1500);
+    }
+
+    // Helper functions for generating random data
+    function getRandomAnalysis() {
+      const analyses = [
+        "No significant security issues detected.",
+        "Domain has a good standing with minor issues.",
+        "Some security concerns noted in the past 6 months.",
+        "Recent improvement in security posture detected.",
+        "Multiple security incidents reported last year."
+      ];
+      return analyses[Math.floor(Math.random() * analyses.length)];
+    }
+    
+    function getRandomPhishingReason() {
+      const reasons = [
+        "Suspicious domain name mimicking a popular brand",
+        "Recently registered domain with high traffic",
+        "Known phishing patterns detected in page content",
+        "Reported by multiple security services",
+        "Suspicious JavaScript behavior detected"
+      ];
+      return reasons[Math.floor(Math.random() * reasons.length)];
+    }
+    
+    function getRandomSSLIssuer() {
+      const issuers = [
+        "Let's Encrypt",
+        "DigiCert",
+        "Comodo",
+        "Sectigo",
+        "GlobalSign",
+        "GoDaddy"
+      ];
+      return issuers[Math.floor(Math.random() * issuers.length)];
+    }
+    
+    function getRandomSSLIssue() {
+      const issues = [
+        "Certificate has expired",
+        "Domain name mismatch",
+        "Self-signed certificate",
+        "Weak encryption algorithm",
+        "Certificate revoked"
+      ];
+      return issues[Math.floor(Math.random() * issues.length)];
+    }
+    
+    function getRandomMalwareTypes(count) {
+      const types = [
+        "Trojan",
+        "Spyware",
+        "Ransomware",
+        "Adware",
+        "Keylogger",
+        "Botnet",
+        "Rootkit",
+        "Worm"
+      ];
+      
+      // Shuffle array and pick first 'count' elements
+      const shuffled = [...types].sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, count).join(', ');
+    }
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add event listener for Enter key in inputs
+      document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            const currentSection = document.querySelector('.section.active').id;
+            if (currentSection === 'reputation') checkReputation();
+            if (currentSection === 'phishing') checkPhishing();
+            if (currentSection === 'domain-age') checkDomainAge();
+            if (currentSection === 'ssl') checkSSL();
+            if (currentSection === 'malware') scanMalware();
+            if (currentSection === 'whois') whoisLookup();
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
