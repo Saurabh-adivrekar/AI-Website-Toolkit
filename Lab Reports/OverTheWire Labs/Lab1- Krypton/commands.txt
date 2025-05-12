@@ -1,0 +1,112 @@
+	# Krypton Level 0 to 1:
+
+echo "S1JZUFRPTklTR1JFQVQ=" | base64 --decode
+
+#Connect Krypton via SSH
+ssh krypton1@krypton.labs.overthewire.org -p 2231
+
+	# Krypton Level 1 :
+
+ls /krypton
+ls /krypton/krypton1
+cat /krypton/krypton1/README
+cat /krypton/krypton1/krypton2
+
+	# Krypton Level 1 → 2:
+
+cat /krypton/krypton1/krypton2
+# Tried ROT13:
+cat /krypton/krypton1/krypton2 | tr 'A-Z' 'N-ZA-M'
+
+	# Krypton Level 2 → 3:
+
+WORKDIR=$(mktemp -d)
+cd $WORKDIR
+ln -s /krypton/krypton2/keyfile.dat
+chmod 777 .
+echo "ABCDEFGHIJKLMNOPQRSTUVWXYZ" > plaintext.txt
+/krypton/krypton2/encrypt plaintext.txt
+cat ciphertext
+cat /krypton/krypton2/krypton3 | tr 'A-Z' 'O-ZA-N'
+
+	# Krypton Level 3 → 4:
+
+# Set up workspace
+WORKDIR=$(mktemp -d)
+cd $WORKDIR
+ln -s /krypton/krypton2/keyfile.dat
+chmod 777 .
+
+# Analyze ciphertext frequencies
+cat /krypton/krypton3/krypton4 | tr -d ' ' | fold -w1 | sort | uniq -c | sort -nr
+
+# Initial substitutions
+cat /krypton/krypton3/krypton4 | tr 'SVBUN' 'ETAOI'
+cat /krypton/krypton3/krypton4 | tr 'SVBUNT' 'ETAOIH'
+
+# Final decryption
+cat /krypton/krypton3/krypton4 | tr 'KSVWBGJDXMNQUPYAL' 'BRUTEFORCESANDIMP'
+
+# Verify level 4 password
+ssh krypton4@krypton.labs.overthewire.org -p 2231
+
+	# Krypton Level 4 → 5:
+
+mkdir -p /tmp/mykrypton4
+cd /tmp/mykrypton4
+ln -s /krypton/krypton4/* .
+
+# Frequency analysis
+for i in {0..5}; do
+    cat found1 | tr -d ' ' | sed -n "s/.\{$i\}\(.\).*/\1/p" | fold -w1 | sort | uniq -c | sort -nr | head -5
+done
+
+# Decrypt krypton5
+cat krypton5 | python3 -c "key = 'FREKEY'; cipher = input().replace(' ', ''); print(''.join(chr((ord(c) - ord(key[i % 6]) - 2 * 65) % 26 + 65) for i, c in enumerate(cipher)))"
+
+
+
+
+	# Krypton Level 5 → 6 Solution:
+
+# 1. Examine the ciphertext
+cat /krypton/krypton5/krypton6
+
+# 2. Frequency analysis of found1
+cat /krypton/krypton5/found1 | tr -d ' ' | fold -w1 | sort | uniq -c | sort -nr | head -10
+
+# 3. Attempt decryption with likely keys
+for key in 'FREKEY' 'GOLDBY' 'SECRET' 'CIPHER'; do
+    echo "Trying key: $key"
+    cat /krypton/krypton5/krypton6 | python3 -c "
+cipher = input().strip().replace(' ', '')
+key = '$key'
+print(''.join(chr((ord(c) - ord(key[i % len(key)])) % 26 + ord('A')) for i, c in enumerate(cipher)))"
+done
+
+# 4. Successful decryption with final key
+cat /krypton/krypton5/krypton6 | python3 -c "
+cipher = input().strip().replace(' ', '')
+key = 'GOLDEN'
+print(''.join(chr((ord(c) - ord(key[i % len(key)])) % 26 + ord('A')) for i, c in enumerate(cipher)))"
+
+# 5. Login to Level 6
+ssh krypton6@krypton.labs.overthewire.org -p 2231
+
+	# Krypton Level 6 → 7
+
+#1 ls
+#2 mktemp -d
+#3 cd/tmp/tmp.HkL6kgFXhQ
+#4 ln -s /krypton/krypton6/keyfile.dot
+#5 ls
+#6 chmod 777.
+#7 ls/krypton/krypton6
+#8 touch example.txt
+nano Hello Wolrd
+/kryton.krypton6/encrypt6 example.txt cipherexample
+ls
+cat example.txt
+man xxd
+xxd -b example.txt
+

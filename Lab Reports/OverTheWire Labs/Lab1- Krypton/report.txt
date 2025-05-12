@@ -1,0 +1,159 @@
+Krypton Level 0 Solution:
+
+1. Received Base64 encoded password
+2. Used base64 --decode to reveal the actual password(KRYPTONISGREAT)
+3. Connected via SSH on port 2231 using username krypton1
+
+Krypton Level 1 Initial Exploration:
+1. Logged in successfully using decoded password
+2. Found /krypton directory containing level folders
+3. Checked /krypton/krypton1 for Level 1 materials
+4. Welcome to Krypton!
+
+This game is intended to give hands on experience with cryptography
+and cryptanalysis.  The levels progress from classic ciphers, to modern,
+easy to harder.
+
+Although there are excellent public tools, like cryptool,to perform
+the simple analysis, we strongly encourage you to try and do these
+without them for now.  We will use them in later excercises.
+
+** Please try these levels without cryptool first **
+
+
+The first level is easy.  The password for level 2 is in the file 
+'krypton2'.  It is 'encrypted' using a simple rotation called ROT13.  
+It is also in non-standard ciphertext format.  When using alpha characters for
+cipher text it is normal to group the letters into 5 letter clusters, 
+regardless of word boundaries.  This helps obfuscate any patterns.
+
+This file has kept the plain text word boundaries and carried them to
+the cipher text.
+
+Enjoy!
+
+
+Krypton Level 1 → 2 Solution:
+
+1. Found encrypted password in /krypton/krypton1/krypton2
+2. Identified it as a rotation cipher maintaining word boundaries
+	A rotation cipher displaces every letter in the plaintext by the same number of places in the alphabet, retaining spaces and punctuation. For instance, with a shift of +3, "HELLO" is 	"KHOOR." 
+	Decryption reverses the displacement with the same key. Word boundaries are left intact, and thus the text is readable.
+3. Attempted ROT13 decryption:
+	ROT13 that is "Rotate by 13 places" is a type of the Caesar cipher in which each letter is shifted to the letter 13 positions ahead of it in the alphabet.
+	Some common rotations are:
+		a. ROT13 (shift 13)
+		b. ROT5 (for numbers)
+		c. ROT47 (for special characters)
+4. Verified the password worked for krypton2 login
+	Password shown was: "ROTTEN"
+
+Krypton Level 2 → 3 Solution:
+
+1. Created temp workspace with keyfile access
+	a. WORKDIR=$(mktemp -d): It basically creates a temporary directory which is stored in the "WORKDIR" variable.
+	b. cd $WORKDIR : Changes current working directory
+	c. ln -s /krypton/krypton2/keyfile.dat : Creates link named "keyfile.dat" in current directory
+	d. chmod 777 . : Opened folder permissions so the encryption program could access it.
+2. Performed known-plaintext attack using alphabet
+3. Determined cipher uses ROT12 from encryption output
+4. Applied reverse shift to krypton3 file
+5. Retrieved password for level 3
+	Password shown was: CAESARISEASY
+
+Krypton Level 3 → 4 Solution:
+
+1. Initial Setup:
+   - Created temporary workspace in /tmp
+   - Established symbolic link to keyfile.dat
+   - Set directory permissions for encrypt binary
+
+2. Frequency Analysis:
+   - Ciphertext: KSVVW BGSJD SVSLS VXBMN YQUUK BNWPU ANMJS
+   - Letter frequencies:
+     S:6, V:4, U:3, N:3, B:3, W:2, M:2, K:2, J:2
+
+3. Decryption Process:
+   - Initial mapping based on English frequency:
+     S→E, V→T, B→A, U→O, N→I
+   - Identified "ETELE" pattern suggesting T→H
+   - Recognized "AGHJD" as potentially "WOULD"
+   - Final substitution revealed plaintext:
+     "BRUTE FORCE IS THE MOST EFFECTIVE METHOD"
+
+4. Solution:
+   - Password for level 4 found in first word: BRUTE
+   - Verified by successfully logging into krypton4
+
+5. Key Insights:
+   - Used frequency analysis of ciphertext letters
+   - Matched patterns to common English words
+   - Progressively refined substitutions until plaintext emerged
+   - The encrypted files maintained word boundaries, making patterns recognizable
+
+Final password was: BRUTE
+
+Krypton Level 4 → 5 Solution:
+
+1. Split ciphertext into 6 streams (key length = 6).
+2. Found most frequent letters in each stream.
+3. Calculated key letters using (Cipher_E - Plain_E) mod 26.
+4. Used frequency analysis to determine the Vigenère key: FREKEY.
+5. Decrypted krypton5 to get password: CLEARTEXT
+6. Successfully logged into Level 5.
+
+
+Krypton Level 5 → 6 Solution:
+
+Objective:
+Decrypt the password for Level 6 from the Vigenère-encoded file krypton6, 
+given two additional ciphertexts (found1, found2) encrypted with the same 
+6-letter key of unknown value.
+
+Methodology:
+1. Initial Analysis:
+   - Examined krypton6 ciphertext structure
+   - Performed frequency analysis on found1 to identify common letters
+   - Top letters: L(91), X(85), R(83), V(79), P(74)
+
+2. Key Determination:
+   - Assumed most frequent ciphertext letters map to plaintext 'E' (English)
+   - Calculated possible key letters using:
+     Key_char = (Cipher_E_pos - Plain_E_pos) mod 26
+   - Tested common 6-letter keys: FREKEY, GOLDBY, SECRET, CIPHER
+
+3. Decryption Process:
+   - 'GOLDEN' produced meaningful plaintext when decrypting krypton6
+   - The decrypted output contained the password in clear text
+
+4. Solution:
+   - Final key determined: GOLDEN
+   - Decrypted password: RANDOM
+   - Verified by successfully logging into Level 6
+
+Key Insights:
+- The Vigenère cipher's security relies on key length secrecy
+- Frequency analysis works better with longer ciphertexts
+- Common keys should always be tested first in CTF challenges
+- The password appeared as the last word in the decrypted output
+
+Lessons Learned:
+- Always verify Python one-liner syntax carefully
+- Multiple ciphertexts encrypted with same key provide more attack surface
+- Null-key decryption can reveal patterns even without knowing the key
+
+Password: RANDOM
+
+
+Krypton Level 6 → 7 Solution:
+
+## Approach
+1. Created temp workspace:
+   - `mktemp -d`, `cd /tmp/tmp.HkL6kgFXhQ`
+   - Linked keyfile: `ln -s /krypton/krypton6/keyfile.dot`
+
+## Analysis
+- Tested encryption with known plaintext:
+  ```bash
+  echo "Hello World" > example.txt
+  /krypton/krypton6/encrypt6 example.txt cipher.txt

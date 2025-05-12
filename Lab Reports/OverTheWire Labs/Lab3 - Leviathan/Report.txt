@@ -1,0 +1,159 @@
+∆ Leviathan Level 0 → 1 Solution Report
+
+Objective is to Ffind the password for leviathan1 in /etc/leviathan_pass/leviathan1.
+
+1. I noticed a readable .backup directory in leviathan0's home:
+   - Command: ls -la
+	It displayed all files with permissions
+   - Found: .backup/bookmarks.html (readable by us)
+
+2. Extracted the password:
+   - Command: strings + grep
+   - How it works:
+     * string: Extracts human-readable text from any type of file as bookmarks.html was not a regular text file
+     * grep: Finds the line with "leviathan1 is"
+     * cut: Extracts just the password part
+   - Found password: 3QJ3TgzHDq
+
+3. Verified by logging into Level 1
+
+
+
+∆ Leviathan Level 1 → 2 Solution:
+
+	1. Found 'check' within home directory
+	2. Executed `ltrace ./check`
+	   - Noticed it checks for password "sex"
+	3. Executed ./check and entered "sex"
+	4. Obtained leviathan2 access
+	5. Executed: cat /etc/leviathan_pass/leviathan2
+
+	Password: NsN1HwFoyN
+
+
+∆ Leviathan Level 2 → 3 Solution Report
+
+	Objective is get password for leviathan3 in /etc/leviathan_pass/leviathan3.
+
+	Procedure:
+	1. Inspected the setuid binary 'printfile' belonging to leviathan3
+	2. Found it insecurely deals with filenames with spaces
+	3. Took advantage of this by:
+	   - Placing a space in a filename: "test file.txt"
+	   - Setting up a symlink "test" to the password file
+	4. When printfile ran on our file, it:
+	   - Read /etc/leviathan_pass/leviathan3 through the symlink
+	   - Tried to read "file.txt"
+
+	Commands:
+	- touch "test file.txt"       
+	- ln -s [target] test         
+	- ~/printfile "spaced file"   
+
+	Password Found:
+	f0n8h2iWLP
+
+
+
+∆ Leviathan Level 3 → 4 Solution
+
+	Objective is to access leviathan4's password in /etc/leviathan_pass/leviathan4.
+
+	Method:
+	1. Utilized vulnerable 'level3' binary.
+	2. Learned it accepts password "snlprintf" using ltrace analysis
+	3. Used shell access trick with commands piping:
+	   (echo "snlprintf"; cat) |./level3
+		- echo "snlprintf" sends the proper password that is snlprintf to the binary initially
+		- This gets past the password check in the program 
+		- cat preserves the input stream open after sending the password
+		- Lets you interact with the spawned shell
+		- (. ) Parentheses: Encloses the commands to execute as a single input stream
+		- |./level3: Pipes the combined output to the vulnerable binary
+
+
+	4. Checked leviathan4 privileges using whoami
+	5. Read the password file directly in the shell with elevated access
+
+	Password Found:
+	WG1egElCvO
+
+
+∆ Leviathan Level 4 → 5 Solution Report
+
+	Objective is to get leviathan5's password from /etc/leviathan_pass/leviathan5.
+
+	1. Found secret binary at .trash/bin (setuid to leviathan5)
+	2. Binary printed password as space-separated 8-bit binary chunks
+	3. Brought binary to ASCII using:
+	   - tr -d ' ' → Strip spaces
+	   - perl -lpe → Pack binary to ASCII
+	   - head -c 10 → Get first 10 chars
+	4. Password shown: 0dyxT7F4QD
+
+	Password Found:
+	0dyxT7F4QD
+
+
+∆ Leviathan Level 5 → 6 Solution 
+
+	Objective: Extract leviathan6's password from /etc/leviathan_pass/leviathan6
+
+	Solution Walkthrough:
+	1. Binary Analysis:
+	   - Found setuid executable (owner: leviathan6)
+	   - Error revealed dependency: /tmp/file.log
+
+	2. Binary Behavior:
+	   - Outputs contents of specified file
+	   - Runs with leviathan6 privileges (setuid)
+
+	3. Exploitation:
+	   - Created dummy file to verify functionality
+	   - Redirected file access via symbolic link:
+	     ln -sf /etc/leviathan_pass/leviathan6 /tmp/file.log
+	   - Executed binary to reveal password
+
+	Password Found:
+	szo7HDB88w
+
+∆ Leviathan Level 6 → 7 Solution 
+
+
+	1. Logged in via SSH:
+  	 ssh leviathan6@leviathan.labs.overthewire.org -p 2223
+  	 Password: szo7HDB88w
+
+	2. Discovered a setuid binary called `leviathan6`.
+  	 Verified it's a 32-bit ELF executable that spawns a shell on correct 4-digit code.
+
+	3. Ran the binary with a test value to see output: ./leviathan6 1234
+
+	4. Brute-forced the code using a for-loop that captured the output:
+	for i in $(seq -w 0000 9999); do 
+ 	    output=$(./leviathan6 "$i" 2>&1)
+  	   echo "$i => $output"
+  	   if [[ "$output" != *"Wrong"* ]]; then
+   	    echo "PIN FOUND: $i"
+   	    break
+  	   fi
+  	 done
+
+	5. Found correct PIN to be 7123.
+
+	6. Ran ./leviathan6 7123, which opened a shell.
+
+	7. Verified identity with `whoami` (returned `leviathan7`).
+
+	8. Retrieved the password for the next level:
+  	 cat /etc/leviathan_pass/leviathan7
+   	→ qEs5Io5yM8
+	
+	Tools Used:
+	- SSH, bash, seq, file, ls
+	- Output checking and shell scripting for brute-force
+
+	Logic:
+	- The binary accepts a 4-digit PIN and opens a shell if entered properly.
+	- We brute-forced it while taking output captures to identify when it worked.
+	- Shell was spawned with `leviathan7` privileges, allowing us to read the next password.	
